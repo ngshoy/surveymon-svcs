@@ -44,7 +44,13 @@ const insertPollData = data => {
       const db = client.db('Surveymon');
       const collection = db.collection('Surveys');
 
-      collection.insertOne(data);
+      collection.insertOne(data, (err, item) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(item);
+        }
+      });
     })
   }).catch(err => {
     reject(err);
