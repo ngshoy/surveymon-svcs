@@ -20,19 +20,10 @@ const connectToDB = () => {
 
 const queryPollData = pollId => {
   return connectToDB().then(client => {
-    return new Promise((resolve, reject) => {
-      const db = client.db('Surveymon');
-      const collection = db.collection('Polls');
+    const db = client.db('Surveymon');
+    const collection = db.collection('Polls');
 
-      collection.findOne({ pollId }, (err, item) => {
-        client.close();
-        if (err) {
-          reject(err);
-        } else {
-          resolve(item);
-        }
-      })
-    })
+    return collection.findOne({ pollId });
   }).catch(err => {
     reject(err);
   });
@@ -40,18 +31,21 @@ const queryPollData = pollId => {
 
 const insertPollData = data => {
   return connectToDB().then(client => {
-    return new Promise((resolve, reject) => {
-      const db = client.db('Surveymon');
-      const collection = db.collection('Polls');
+    const db = client.db('Surveymon');
+    const collection = db.collection('Polls');
 
-      collection.insertOne(data, (err, item) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(item);
-        }
-      });
-    })
+    return collection.insertOne(data);
+  }).catch(err => {
+    reject(err);
+  });
+}
+
+const upvote = (pollId, { vote }) => {
+  return connectToDB().then(client => {
+    const db = client.db('Surveymon');
+    const collection = db.collection('Polls');
+
+    return collection.updateOne({ pollId, 'options.name': vote }, { $inc: {'options.$.voteCount' : 1} });
   }).catch(err => {
     reject(err);
   });
@@ -59,5 +53,6 @@ const insertPollData = data => {
 
 module.exports = {
   queryPollData,
-  insertPollData
+  insertPollData,
+  upvote
 };
