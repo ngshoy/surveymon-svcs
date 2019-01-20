@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {
   queryPollData,
-  insertPollData,
   upvote
 } = require('./db/poll');
+const {
+  insertPollData
+} = require('./db/poll-mongoose');
 
 const app = express();
 // app.use(bodyParser.urlencoded({ extended: true }));
