@@ -4,7 +4,7 @@ const {
   queryPollData,
   insertPollData,
   upvote
-} = require('./db');
+} = require('./db/poll');
 
 const app = express();
 // app.use(bodyParser.urlencoded({ extended: true }));
