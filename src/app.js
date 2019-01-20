@@ -1,10 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {
-  queryPollData,
   upvote
 } = require('./db/poll');
 const {
+  queryPollData,
   insertPollData
 } = require('./db/poll-mongoose');
 

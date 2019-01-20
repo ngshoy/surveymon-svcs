@@ -1,11 +1,6 @@
 const { model } = require('mongoose');
-const uuidv4 = require('uuid/v4');
 
 const Poll = model('Poll', {
-  pollId: {
-    type: String,
-    default: uuidv4()
-  },
   topic: {
     type: String,
     required: true,

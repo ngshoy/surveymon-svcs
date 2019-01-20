@@ -24,7 +24,7 @@ const queryPollData = pollId => {
       const db = client.db('Surveymon');
       const collection = db.collection('Polls');
 
-      collection.findOne({ pollId }, (err, item) => {
+      collection.findOne({ _id: pollId }, (err, item) => {
         client.close();
         if (err) {
           reject(err);
@@ -64,7 +64,7 @@ const upvote = (pollId, { vote }) => {
       const db = client.db('Surveymon');
       const collection = db.collection('Polls');
 
-      collection.updateOne({ pollId, 'options.name': vote }, { $inc: {'options.$.voteCount' : 1} }, (err, item) => {
+      collection.updateOne({ _id: pollId, 'options.name': vote }, { $inc: {'options.$.voteCount' : 1} }, (err, item) => {
         client.close();
         if (err) {
           reject(err);

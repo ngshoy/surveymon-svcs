@@ -36,7 +36,7 @@ describe('POST /CreatePoll', () => {
     .send(pollData)
     .expect(200)
     .expect(res => {
-      expect(res.body.pollId).toBeDefined();
+      expect(res.body._id).toBeDefined();
     })
     .end((err, res) => {
       if (err) {
@@ -54,7 +54,7 @@ describe('POST /CreatePoll', () => {
     .send(pollData)
     .expect(400)
     .expect(res => {
-      expect(res.body.pollId).toBeUndefined();
+      expect(res.body._id).toBeUndefined();
       expect(res.body.name).toBe('ValidationError');
     })
     .end((err, res) => {
