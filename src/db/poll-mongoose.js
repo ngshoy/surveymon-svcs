@@ -12,7 +12,7 @@ const insertPollData = data => {
 }
 
 const queryPollData = pollId => {
-  return Poll.findOne({ _id: pollId });
+  return Poll.findById(pollId);
 }
 
 module.exports = {

@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 const getErrorCode = err => {
   let errCode;
-  if (err.name === 'ValidationError') {
+  if (err.name === 'ValidationError' || err.name === 'CastError') {
     errCode = 400;
   } else {
     errCode = 500;
@@ -38,9 +38,13 @@ app.get('/ViewPoll/:pollId', async (req, res) => {
   try {
     document = await queryPollData(req.params.pollId);
   } catch (err) {
-    res.status(500).send(err);
+    const errCode = getErrorCode(err);
+    res.status(errCode).send(err);
   }
 
+  if (!document) {
+    res.sendStatus(404);
+  }
   res.status(200).send(document);
 });
 
