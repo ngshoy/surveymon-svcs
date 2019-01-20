@@ -18,6 +18,16 @@ app.use(bodyParser.json());
 //   res.end(JSON.stringify(req.body, null, 2));
 // });
 
+const getErrorCode = err => {
+  let errCode;
+  if (err.name === 'ValidationError') {
+    errCode = 400;
+  } else {
+    errCode = 500;
+  }
+  return errCode;
+}
+
 app.get('/health', (req, res) => {
   res.send('Server is healthy!');
 });
@@ -40,7 +50,8 @@ app.post('/CreatePoll', async (req, res) => {
   try {
     document = await insertPollData(req.body);
   } catch (err) {
-    res.status(500).send(err);
+    const errCode = getErrorCode(err);
+    res.status(errCode).send(err);
   }
 
   res.status(200).send(document);
@@ -52,7 +63,8 @@ app.post('/vote/:pollId', async (req, res) => {
   try {
     document = await upvote(req.params.pollId, req.body);
   } catch (err) {
-    res.status(500).send(err);
+    const errCode = getErrorCode(err);
+    res.status(errCode).send(err);
   }
 
   res.status(200).send(document);
@@ -61,3 +73,5 @@ app.post('/vote/:pollId', async (req, res) => {
 app.listen(3000, function () {
   console.log('server has started at port 3000');
 });
+
+module.exports = { app };
