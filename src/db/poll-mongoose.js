@@ -19,8 +19,13 @@ const deletePollData = pollId => {
   return Poll.findByIdAndRemove(pollId);
 }
 
+const upvote = (pollId, vote) => {
+  return Poll.findOneAndUpdate({ _id: pollId, 'options.name': vote }, { $inc: { 'options.$.voteCount': 1 }});
+}
+
 module.exports = {
   queryPollData,
   insertPollData,
-  deletePollData
+  deletePollData,
+  upvote
 }

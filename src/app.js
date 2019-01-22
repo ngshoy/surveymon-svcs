@@ -1,12 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {
-  upvote
-} = require('./db/poll');
-const {
   queryPollData,
   insertPollData,
-  deletePollData
+  deletePollData,
+  upvote
 } = require('./db/poll-mongoose');
 
 const app = express();
@@ -30,70 +28,102 @@ const getErrorCode = err => {
   return errCode;
 }
 
+const handleRequest = async (req, res, cb, params) => {
+  let document;
+
+  try {
+    document = await cb(...params);
+  } catch (err) {
+    const errCode = getErrorCode(err);
+    res.status(errCode).send(err);
+  }
+
+  if (!document) {
+    res.sendStatus(404);
+  }
+  res.status(200).send(document);
+}
+
 app.get('/health', (req, res) => {
   res.send('Server is healthy!');
 });
 
-app.get('/ViewPoll/:pollId', async (req, res) => {
-  let document;
-
-  try {
-    document = await queryPollData(req.params.pollId);
-  } catch (err) {
-    const errCode = getErrorCode(err);
-    res.status(errCode).send(err);
-  }
-
-  if (!document) {
-    res.sendStatus(404);
-  }
-  res.status(200).send(document);
+app.get('/ViewPoll/:pollId', (req, res) => {
+  handleRequest(req, res, queryPollData, [req.params.pollId]);
 });
 
-app.post('/CreatePoll', async (req, res) => {
-  let document;
+// app.get('/ViewPoll/:pollId', async (req, res) => {
+//   let document;
 
-  try {
-    document = await insertPollData(req.body);
-  } catch (err) {
-    const errCode = getErrorCode(err);
-    res.status(errCode).send(err);
-  }
+//   try {
+//     document = await queryPollData(req.params.pollId);
+//   } catch (err) {
+//     const errCode = getErrorCode(err);
+//     res.status(errCode).send(err);
+//   }
 
-  res.status(200).send(document);
+//   if (!document) {
+//     res.sendStatus(404);
+//   }
+//   res.status(200).send(document);
+// });
+
+app.put('/CreatePoll', (req, res) => {
+  handleRequest(req, res, insertPollData, [req.body]);
 });
 
-app.delete('/DeletePoll/:pollId', async (req, res) => {
-  let document;
+// app.post('/CreatePoll', async (req, res) => {
+//   let document;
 
-  try {
-    document = await deletePollData(req.params.pollId);
-  } catch (err) {
-    const errCode = getErrorCode(err);
-    res.status(errCode).send(err);
-  }
+//   try {
+//     document = await insertPollData(req.body);
+//   } catch (err) {
+//     const errCode = getErrorCode(err);
+//     res.status(errCode).send(err);
+//   }
 
-  if (!document) {
-    res.sendStatus(404);
-  }
-  res.status(200).send(document);
+//   res.status(200).send(document);
+// });
+
+app.delete('/DeletePoll/:pollId', (req, res) => {
+  handleRequest(req, res, deletePollData, [req.params.pollId]);
 });
 
-app.post('/vote/:pollId', async (req, res) => {
-  let document;
+// app.delete('/DeletePoll/:pollId', async (req, res) => {
+//   let document;
 
-  try {
-    document = await upvote(req.params.pollId, req.body);
-  } catch (err) {
-    const errCode = getErrorCode(err);
-    res.status(errCode).send(err);
-  }
+//   try {
+//     document = await deletePollData(req.params.pollId);
+//   } catch (err) {
+//     const errCode = getErrorCode(err);
+//     res.status(errCode).send(err);
+//   }
 
-  if (!document) {
-    res.sendStatus(404);
-  }
-  res.status(200).send(document);
-})
+//   if (!document) {
+//     res.sendStatus(404);
+//   }
+//   res.status(200).send(document);
+// });
+
+app.patch('/vote/:pollId', (req, res) => {
+  handleRequest(req, res, upvote, [req.params.pollId, req.body.vote]);
+});
+
+// app.post('/vote/:pollId', async (req, res) => {
+//   let document;
+
+//   try {
+//     document = await upvote(req.params.pollId, req.body);
+//   } catch (err) {
+//     const errCode = getErrorCode(err);
+//     res.status(errCode).send(err);
+//   }
+
+//   if (!document) {
+//     res.sendStatus(404);
+//   }
+//   res.status(200).send(document);
+// });
 
 app.listen(port, function () {
   console.log(`server has started at port ${port}`);

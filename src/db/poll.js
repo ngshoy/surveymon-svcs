@@ -62,7 +62,7 @@ const upvote = (pollId, { vote }) => {
   return connectToDB().then(client => {
     return new Promise((resolve, reject) => {
       const db = client.db('Surveymon');
-      const collection = db.collection('Polls');
+      const collection = db.collection('polls');
 
       collection.updateOne({ _id: pollId, 'options.name': vote }, { $inc: {'options.$.voteCount' : 1} }, (err, item) => {
         client.close();
