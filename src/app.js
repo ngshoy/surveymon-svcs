@@ -5,7 +5,8 @@ const {
 } = require('./db/poll');
 const {
   queryPollData,
-  insertPollData
+  insertPollData,
+  deletePollData
 } = require('./db/poll-mongoose');
 
 const app = express();
@@ -62,6 +63,22 @@ app.post('/CreatePoll', async (req, res) => {
   res.status(200).send(document);
 });
 
+app.delete('/DeletePoll/:pollId', async (req, res) => {
+  let document;
+
+  try {
+    document = await deletePollData(req.params.pollId);
+  } catch (err) {
+    const errCode = getErrorCode(err);
+    res.status(errCode).send(err);
+  }
+
+  if (!document) {
+    res.sendStatus(404);
+  }
+  res.status(200).send(document);
+});
+
 app.post('/vote/:pollId', async (req, res) => {
   let document;
 
@@ -72,6 +89,9 @@ app.post('/vote/:pollId', async (req, res) => {
     res.status(errCode).send(err);
   }
 
+  if (!document) {
+    res.sendStatus(404);
+  }
   res.status(200).send(document);
 })
 

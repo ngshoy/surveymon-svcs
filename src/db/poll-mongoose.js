@@ -15,7 +15,12 @@ const queryPollData = pollId => {
   return Poll.findById(pollId);
 }
 
+const deletePollData = pollId => {
+  return Poll.findByIdAndRemove(pollId);
+}
+
 module.exports = {
   queryPollData,
-  insertPollData
+  insertPollData,
+  deletePollData
 }
