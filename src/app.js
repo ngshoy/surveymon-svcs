@@ -9,6 +9,7 @@ const {
 } = require('./db/poll-mongoose');
 
 const app = express();
+const port = process.env.PORT || 3000;
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use((req, res) => {
@@ -74,8 +75,8 @@ app.post('/vote/:pollId', async (req, res) => {
   res.status(200).send(document);
 })
 
-app.listen(3000, function () {
-  console.log('server has started at port 3000');
+app.listen(port, function () {
+  console.log(`server has started at port ${port}`);
 });
 
 module.exports = { app };
