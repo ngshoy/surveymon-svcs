@@ -1,3 +1,4 @@
+require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {
@@ -7,8 +8,9 @@ const {
   upvote
 } = require('./db/poll');
 
+console.log(process.env.MONGODB_URI);
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use((req, res) => {

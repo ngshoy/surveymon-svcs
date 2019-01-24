@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Poll } = require('./models/pollModel');
 
-const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/Surveymon';
+const url = process.env.MONGODB_URI;
 
 mongoose.Promise = global.Promise;
 mongoose.connect(url, { useNewUrlParser: true });
