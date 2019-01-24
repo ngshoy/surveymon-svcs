@@ -8,9 +8,7 @@ const {
   upvote
 } = require('./db/poll');
 
-console.log(process.env.MONGODB_URI);
 const app = express();
-const port = process.env.PORT;
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use((req, res) => {
@@ -66,8 +64,8 @@ app.patch('/vote/:pollId', (req, res) => {
   handleRequest(req, res, upvote, [req.params.pollId, req.body.vote]);
 });
 
-app.listen(port, function () {
-  console.log(`server has started at port ${port}`);
+app.listen(process.env.PORT, function () {
+  console.log(`server has started at port ${process.env.PORT}`);
 });
 
 module.exports = { app };

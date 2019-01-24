@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const { Poll } = require('./models/pollModel');
 
-const url = process.env.MONGODB_URI;
-
 mongoose.Promise = global.Promise;
-mongoose.connect(url, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 
 const insertPollData = data => {
   const newPoll = new Poll(data);
