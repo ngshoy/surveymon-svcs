@@ -5,7 +5,7 @@ const {
   insertPollData,
   deletePollData,
   upvote
-} = require('./db/poll-mongoose');
+} = require('./db/poll');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -52,78 +52,17 @@ app.get('/ViewPoll/:pollId', (req, res) => {
   handleRequest(req, res, queryPollData, [req.params.pollId]);
 });
 
-// app.get('/ViewPoll/:pollId', async (req, res) => {
-//   let document;
-
-//   try {
-//     document = await queryPollData(req.params.pollId);
-//   } catch (err) {
-//     const errCode = getErrorCode(err);
-//     res.status(errCode).send(err);
-//   }
-
-//   if (!document) {
-//     res.sendStatus(404);
-//   }
-//   res.status(200).send(document);
-// });
-
 app.put('/CreatePoll', (req, res) => {
   handleRequest(req, res, insertPollData, [req.body]);
 });
-
-// app.post('/CreatePoll', async (req, res) => {
-//   let document;
-
-//   try {
-//     document = await insertPollData(req.body);
-//   } catch (err) {
-//     const errCode = getErrorCode(err);
-//     res.status(errCode).send(err);
-//   }
-
-//   res.status(200).send(document);
-// });
 
 app.delete('/DeletePoll/:pollId', (req, res) => {
   handleRequest(req, res, deletePollData, [req.params.pollId]);
 });
 
-// app.delete('/DeletePoll/:pollId', async (req, res) => {
-//   let document;
-
-//   try {
-//     document = await deletePollData(req.params.pollId);
-//   } catch (err) {
-//     const errCode = getErrorCode(err);
-//     res.status(errCode).send(err);
-//   }
-
-//   if (!document) {
-//     res.sendStatus(404);
-//   }
-//   res.status(200).send(document);
-// });
-
 app.patch('/vote/:pollId', (req, res) => {
   handleRequest(req, res, upvote, [req.params.pollId, req.body.vote]);
 });
-
-// app.post('/vote/:pollId', async (req, res) => {
-//   let document;
-
-//   try {
-//     document = await upvote(req.params.pollId, req.body);
-//   } catch (err) {
-//     const errCode = getErrorCode(err);
-//     res.status(errCode).send(err);
-//   }
-
-//   if (!document) {
-//     res.sendStatus(404);
-//   }
-//   res.status(200).send(document);
-// });
 
 app.listen(port, function () {
   console.log(`server has started at port ${port}`);
