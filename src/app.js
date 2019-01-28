@@ -9,6 +9,12 @@ const {
 } = require('./db/poll');
 
 const app = express();
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, PATCH');
+  next();
+});
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use((req, res) => {
@@ -39,7 +45,7 @@ const handleRequest = async (req, res, cb, params) => {
   }
 
   if (!document) {
-    res.sendStatus(404);
+    res.status(404).send();
   }
   res.status(200).send(document);
 }
