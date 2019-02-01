@@ -117,3 +117,52 @@ describe('GET /ViewPoll/:pollId', () => {
     })
   });
 });
+
+describe('PATCH /vote/:pollId', () => {
+  beforeEach(done => {
+    Poll.deleteMany({}).then(() => null);
+    const newPoll = new Poll(pollData);
+    newPoll.save().then(() => done());
+  });
+
+  after(done => {
+    Poll.deleteMany({}).then(() => done());
+  })
+
+  it('should find the poll and upvote correctly', done => {
+    const voteOption = { "vote": "Ematei" };
+    request(app)
+    .patch(`/vote/${id.toHexString()}`)
+    .send(voteOption)
+    .expect(200)
+    .expect(res => {
+      expect(res.body.options[0].name).toBe('Ematei');
+      expect(res.body.options[0].voteCount).toBe(1);
+    })
+    .end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      return done();
+    })
+  });
+
+  it('should not find any poll to vote on with invalid id', done => {
+    const invalidId = new ObjectID();
+    const voteOption = { "vote": "Ematei" };
+
+    request(app)
+    .patch(`/vote/${invalidId.toHexString()}`)
+    .send(voteOption)
+    .expect(404)
+    .expect(res => {
+      expect(res.body._id).toBeUndefined();
+    })
+    .end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      return done();
+    })
+  });
+});
