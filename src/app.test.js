@@ -4,39 +4,37 @@ const request = require('supertest');
 const { app } = require('./app');
 const { Poll } = require('./db/models/pollModel');
 
-describe('POST /CreatePoll', () => {
-  const pollData = {
-    "topic": "where should we go for lunch?",
-    "options": [{
-        "name": "Ematei",
-        "voteCount": 1
-      },
-      {
-        "name": "Niu Da",
-        "voteCount": 0
-      },
-      {
-        "name": "Hong Shing",
-        "voteCount": 0
-      },
-      {
-        "name": "Modern Work",
-        "voteCount": 0
-      }
-    ]
-  };
+const pollData = {
+  "topic": "where should we go for lunch?",
+  "options": [{
+      "name": "Ematei "
+    },
+    {
+      "name": "Niu Da"
+    },
+    {
+      "name": "Hong Shing"
+    },
+    {
+      "name": "Modern Work"
+    }
+  ]
+};
 
+describe('PUT /CreatePoll', () => {
   beforeEach(done => {
     Poll.deleteMany({}).then(() => done());
   });
 
-  it('should create a new poll', done => {
+  it('should create a new poll with correct data', done => {
     request(app)
-    .post('/CreatePoll')
+    .put('/CreatePoll')
     .send(pollData)
     .expect(200)
     .expect(res => {
       expect(res.body._id).toBeDefined();
+      expect(res.body.options[0].name).toBe('Ematei');
+      expect(res.body.options[0].voteCount).toBe(0);
     })
     .end((err, res) => {
       if (err) {
@@ -50,7 +48,7 @@ describe('POST /CreatePoll', () => {
     pollData.topic = '';
 
     request(app)
-    .post('/CreatePoll')
+    .put('/CreatePoll')
     .send(pollData)
     .expect(400)
     .expect(res => {

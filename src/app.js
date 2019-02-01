@@ -41,13 +41,13 @@ const handleRequest = async (req, res, cb, params) => {
     document = await cb(...params);
   } catch (err) {
     const errCode = getErrorCode(err);
-    res.status(errCode).send(err);
+    return res.status(errCode).send(err);
   }
 
   if (!document) {
-    res.status(404).send();
+    return res.status(404).send();
   }
-  res.status(200).send(document);
+  return res.status(200).send(document);
 }
 
 app.get('/health', (req, res) => {

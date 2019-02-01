@@ -1,5 +1,17 @@
-const { model } = require('mongoose');
+const { model, Schema } = require('mongoose');
 
+const PollOptionSchema = new Schema({ 
+  name: {
+    type: String,
+    required: true,
+    minLength: 1,
+    trim: true
+  },
+  voteCount: {
+    type: Number,
+    default: 0
+  }
+ })
 const Poll = model('Poll', {
   topic: {
     type: String,
@@ -7,10 +19,7 @@ const Poll = model('Poll', {
     minLength: 1,
     trim: true
   },
-  options: {
-    type: Array,
-    required: true
-  }
+  options: [PollOptionSchema]
 });
 
 module.exports = { Poll };
