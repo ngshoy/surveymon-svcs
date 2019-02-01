@@ -166,3 +166,46 @@ describe('PATCH /vote/:pollId', () => {
     })
   });
 });
+
+describe('DELETE /DeletePoll/:pollId', () => {
+  beforeEach(done => {
+    const newPoll = new Poll(pollData);
+    newPoll.save().then(() => done());
+  });
+
+  after(done => {
+    Poll.deleteMany({}).then(() => done());
+  })
+
+  it('should be able to delete poll', done => {
+    request(app)
+    .delete(`/DeletePoll/${id.toHexString()}`)
+    .expect(200)
+    .expect(res => {
+      expect(res.body._id).toEqual(id.toHexString());
+    })
+    .end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      return done();
+    })
+  });
+
+  it('should not find any poll to vote on with invalid id', done => {
+    const invalidId = new ObjectID();
+
+    request(app)
+    .delete(`/DeletePoll/${invalidId.toHexString()}`)
+    .expect(404)
+    .expect(res => {
+      expect(res.body._id).toBeUndefined();
+    })
+    .end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      return done();
+    })
+  });
+});
