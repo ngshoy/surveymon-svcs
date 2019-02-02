@@ -19,7 +19,15 @@ const Poll = model('Poll', {
     minLength: 1,
     trim: true
   },
-  options: [PollOptionSchema]
+  options: {
+    type: [PollOptionSchema],
+    required: true,
+    validate: [arrayMinLimit, 'does not meet the minimum of 2']
+  }
 });
+
+function arrayMinLimit(arr) {
+  return arr.length >= 2;
+};
 
 module.exports = { Poll };
