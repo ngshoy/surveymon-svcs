@@ -9,7 +9,7 @@ const insertPollData = data => {
   return newPoll.save();
 }
 
-const queryPollData = pollId => {
+const retrievePollData = pollId => {
   return Poll.findById(pollId);
 }
 
@@ -22,7 +22,7 @@ const upvote = (pollId, vote) => {
 }
 
 module.exports = {
-  queryPollData,
+  retrievePollData,
   insertPollData,
   deletePollData,
   upvote

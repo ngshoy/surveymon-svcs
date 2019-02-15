@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const {
-  queryPollData,
+  retrievePollData,
   insertPollData,
   deletePollData,
   upvote
@@ -57,7 +57,7 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/ViewPoll/:pollId', (req, res) => {
-  handleRequest(req, res, queryPollData, [req.params.pollId]);
+  handleRequest(req, res, retrievePollData, [req.params.pollId]);
 });
 
 app.put('/CreatePoll', (req, res) => {
