@@ -13,6 +13,10 @@ const retrievePollData = pollId => {
   return Poll.findById(pollId);
 }
 
+const retrievePollForVote = pollId => {
+  return Poll.findById(pollId, '_id topic options.name');
+}
+
 const deletePollData = pollId => {
   return Poll.findByIdAndRemove(pollId);
 }
@@ -23,6 +27,7 @@ const upvote = (pollId, vote) => {
 
 module.exports = {
   retrievePollData,
+  retrievePollForVote,
   insertPollData,
   deletePollData,
   upvote

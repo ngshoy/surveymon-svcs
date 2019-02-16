@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const {
   retrievePollData,
+  retrievePollForVote,
   insertPollData,
   deletePollData,
   upvote
@@ -42,6 +43,7 @@ const handleRequest = async (req, res, cb, params) => {
   try {
     document = await cb(...params);
   } catch (err) {
+    console.error(err);
     const errCode = getErrorCode(err);
     return res.status(errCode).send(err);
   }
@@ -57,8 +59,12 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/ViewPoll/:pollId', (req, res) => {
-  handleRequest(req, res, retrievePollData, [req.params.pollId]);
+  handleRequest(req, res, retrievePollForVote, [req.params.pollId]);
 });
+
+app.get('/PollResults/:pollId', (req, res) => {
+  handleRequest(req, res, retrievePollData, [req.params.pollId]);
+})
 
 app.put('/CreatePoll', (req, res) => {
   handleRequest(req, res, insertPollData, [req.body]);
