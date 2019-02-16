@@ -14,7 +14,7 @@ const retrievePollData = pollId => {
 }
 
 const retrievePollForVote = pollId => {
-  return Poll.findById(pollId, '_id topic options.name');
+  return Poll.findById(pollId, { 'options.voteCount': 0 });
 }
 
 const deletePollData = pollId => {
