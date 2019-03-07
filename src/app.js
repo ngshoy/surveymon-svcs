@@ -2,6 +2,7 @@ require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const expressjwt = require('express-jwt');
 const {
   retrievePollData,
   retrievePollForVote,
@@ -11,6 +12,9 @@ const {
 } = require('./db/poll');
 
 const app = express();
+const jwtCheck = expressjwt({
+  secret: 'mysupersecretkey'
+});
 app.use(cors());
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
@@ -58,23 +62,23 @@ app.get('/health', (req, res) => {
   res.send('Server is healthy!');
 });
 
-app.get('/ViewPoll/:pollId', (req, res) => {
+app.get('/ViewPoll/:pollId', jwtCheck, (req, res) => {
   handleRequest(req, res, retrievePollForVote, [req.params.pollId]);
 });
 
-app.get('/PollResults/:pollId', (req, res) => {
+app.get('/PollResults/:pollId', jwtCheck, (req, res) => {
   handleRequest(req, res, retrievePollData, [req.params.pollId]);
 })
 
-app.put('/CreatePoll', (req, res) => {
+app.put('/CreatePoll', jwtCheck, (req, res) => {
   handleRequest(req, res, insertPollData, [req.body]);
 });
 
-app.delete('/DeletePoll/:pollId', (req, res) => {
+app.delete('/DeletePoll/:pollId', jwtCheck, (req, res) => {
   handleRequest(req, res, deletePollData, [req.params.pollId]);
 });
 
-app.patch('/vote/:pollId', (req, res) => {
+app.patch('/vote/:pollId', jwtCheck, (req, res) => {
   handleRequest(req, res, upvote, [req.params.pollId, req.body.vote]);
 });
 
